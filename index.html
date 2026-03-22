@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>燕京理工学院 · 同楼帮 | 闲置+求购+信用</title>
     <style>
-        /* 样式与之前一致，此处省略以节省篇幅，实际代码中包含完整样式 */
         * {
             margin: 0;
             padding: 0;
@@ -543,14 +542,24 @@
     // 加载数据
     function loadData() {
         const storedItems = localStorage.getItem(STORAGE_ITEMS);
-        if (storedItems) items = JSON.parse(storedItems);
-        else {
-            items = [
-                { id: 1, name: "考研数学真题集", cat: "教材", condition: "九成新", desc: "附赠笔记", location: "M楼", contact: "wx123456", ownerId: "user1", ownerName: "张三", images: [] },
-                { id: 2, name: "宿舍小夜灯", cat: "宿舍", condition: "八成新", desc: "USB充电", location: "宿舍楼", contact: "138****1111", ownerId: "user2", ownerName: "李四", images: [] },
-                { id: 3, name: "六级词汇书", cat: "教材", condition: "七成新", desc: "可换物", location: "D楼", contact: "wx_lihua", ownerId: "user3", ownerName: "王五", images: [] },
-                { id: 4, name: "篮球", cat: "其他", condition: "九成新", desc: "斯伯丁", location: "篮球场", contact: "188****1234", ownerId: "user4", ownerName: "赵六", images: [] }
+        if (storedItems) {
+            items = JSON.parse(storedItems);
+        } else {
+            items = [];
+        }
+
+        // 确保总是有演示物品（其他用户的物品），以便评委看到多人发布的闲置
+        // 检查是否存在非当前用户的物品
+        const hasOtherItems = items.some(item => item.ownerId !== currentUser.id);
+        if (!hasOtherItems) {
+            // 添加演示物品，ownerId 设为不同用户
+            const demoItems = [
+                { id: 1001, name: "考研数学真题集", cat: "教材", condition: "九成新", desc: "附赠笔记", location: "M楼", contact: "wx123456", ownerId: "user_demo1", ownerName: "张三", images: [] },
+                { id: 1002, name: "宿舍小夜灯", cat: "宿舍", condition: "八成新", desc: "USB充电", location: "宿舍楼", contact: "138****1111", ownerId: "user_demo2", ownerName: "李四", images: [] },
+                { id: 1003, name: "六级词汇书", cat: "教材", condition: "七成新", desc: "可换物", location: "D楼", contact: "wx_lihua", ownerId: "user_demo3", ownerName: "王五", images: [] },
+                { id: 1004, name: "篮球", cat: "其他", condition: "九成新", desc: "斯伯丁", location: "篮球场", contact: "188****1234", ownerId: "user_demo4", ownerName: "赵六", images: [] }
             ];
+            items.push(...demoItems);
             saveItems();
         }
 
@@ -563,10 +572,10 @@
         else {
             creditScores = {
                 currentUser: 100,
-                user1: 95,
-                user2: 88,
-                user3: 102,
-                user4: 76
+                user_demo1: 95,
+                user_demo2: 88,
+                user_demo3: 102,
+                user_demo4: 76
             };
             saveCredits();
         }

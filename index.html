@@ -635,9 +635,17 @@
     function getCredit(userId) { return creditScores[userId] || 80; }
 
     // 导出数据功能
-    window.exportData = function() {
-    // 只导出物品的基本信息，不包含图片
-    const simpleItems = items.map(item => ({
+   // 导出数据功能（简洁版）
+window.exportData = function() {
+    // 只导出当前用户发布的物品
+    const myItems = items.filter(item => item.ownerId === currentUser.id);
+    
+    if (myItems.length === 0) {
+        alert("你还没有发布过物品，暂无数据可导出");
+        return;
+    }
+    
+    const simpleItems = myItems.map(item => ({
         name: item.name,
         cat: item.cat,
         condition: item.condition,
@@ -645,47 +653,69 @@
         contact: item.contact,
         ownerName: item.ownerName
     }));
-    const data = { items: simpleItems };
-    const jsonStr = JSON.stringify(data);
+    
+    const jsonStr = JSON.stringify({ items: simpleItems });
     navigator.clipboard.writeText(jsonStr).then(() => {
-        alert("✅ 已复制物品列表！\n发给队友导入即可看到。");
+        alert(`✅ 已复制 ${simpleItems.length} 件物品\n发给队友导入即可。`);
     }).catch(() => {
         prompt("请复制以下数据发给队友：", jsonStr);
     });
 };
 
     // 导入数据功能
-    window.importData = function() {
-        const jsonStr = prompt("📋 请粘贴队友发给你的数据：");
-        if (!jsonStr) return;
-        try {
-            const data = JSON.parse(jsonStr);
-            if (data.items) {
-                for (let newItem of data.items) {
-                    if (!items.some(i => i.id === newItem.id)) {
-                        items.push(newItem);
-                    }
-                }
-                saveItems();
-            }
-            if (data.wanted) {
-                for (let newWanted of data.wanted) {
-                    if (!wantedList.some(w => w.id === newWanted.id)) {
-                        wantedList.push(newWanted);
-                    }
-                }
-                saveWanted();
-            }
-            if (data.credits) {
-                Object.assign(creditScores, data.credits);
-                saveCredits();
-            }
-            alert("✅ 导入成功！刷新页面查看队友的物品");
-            location.reload();
-        } catch(e) {
-            alert("❌ 数据格式错误，请重新复制队友的数据");
+   // 导入数据功能（兼容简洁版）
+window.importData = function() {
+    const jsonStr = prompt("📋 请粘贴队友发给你的数据：");
+    if (!jsonStr) return;
+    try {
+        const data = JSON.parse(jsonStr);
+        
+        // 兼容两种格式：直接是数组，或者包含 items 字段
+        let newItems = [];
+        if (Array.isArray(data)) {
+            newItems = data;
+        } else if (data.items && Array.isArray(data.items)) {
+            newItems = data.items;
+        } else {
+            alert("数据格式错误，请重新复制");
+            return;
         }
-    };
+        
+        let addedCount = 0;
+        for (let newItem of newItems) {
+            // 检查是否已存在（根据名称+发布者判断）
+            const exists = items.some(i => i.name === newItem.name && i.ownerName === newItem.ownerName);
+            if (!exists) {
+                items.push({
+                    id: Date.now() + Math.random(),
+                    name: newItem.name,
+                    cat: newItem.cat,
+                    condition: newItem.condition,
+                    location: newItem.location,
+                    contact: newItem.contact || "未填",
+                    ownerId: currentUser.id,
+                    ownerName: currentUser.name,
+                    images: [],
+                    desc: newItem.desc || ""
+                });
+                addedCount++;
+            }
+        }
+        
+        if (addedCount > 0) {
+            saveItems();
+            alert(`✅ 导入成功！新增 ${addedCount} 件物品`);
+            renderHome();
+            renderProfile();
+            renderWanted();
+        } else {
+            alert("没有发现新物品，可能已经导入过了");
+        }
+    } catch(e) {
+        console.error(e);
+        alert("❌ 数据格式错误，请重新复制队友的数据");
+    }
+};
 
     // 复制联系方式
     window.copyContact = function(contact) {

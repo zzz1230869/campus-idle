@@ -636,18 +636,23 @@
 
     // 导出数据功能
     window.exportData = function() {
-        const data = {
-            items: items,
-            wanted: wantedList,
-            credits: creditScores
-        };
-        const jsonStr = JSON.stringify(data);
-        navigator.clipboard.writeText(jsonStr).then(() => {
-            alert("✅ 数据已复制到剪贴板！\n请发给队友，让他点击「导入数据」粘贴即可。");
-        }).catch(() => {
-            prompt("请复制以下数据发给队友：", jsonStr);
-        });
-    };
+    // 只导出物品的基本信息，不包含图片
+    const simpleItems = items.map(item => ({
+        name: item.name,
+        cat: item.cat,
+        condition: item.condition,
+        location: item.location,
+        contact: item.contact,
+        ownerName: item.ownerName
+    }));
+    const data = { items: simpleItems };
+    const jsonStr = JSON.stringify(data);
+    navigator.clipboard.writeText(jsonStr).then(() => {
+        alert("✅ 已复制物品列表！\n发给队友导入即可看到。");
+    }).catch(() => {
+        prompt("请复制以下数据发给队友：", jsonStr);
+    });
+};
 
     // 导入数据功能
     window.importData = function() {

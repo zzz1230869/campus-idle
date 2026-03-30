@@ -636,8 +636,8 @@
 
     // 导出数据功能
    // 导出数据功能（简洁版）
+// 导出数据功能（纯文本版）
 window.exportData = function() {
-    // 只导出当前用户发布的物品
     const myItems = items.filter(item => item.ownerId === currentUser.id);
     
     if (myItems.length === 0) {
@@ -645,75 +645,110 @@ window.exportData = function() {
         return;
     }
     
-    const simpleItems = myItems.map(item => ({
-        name: item.name,
-        cat: item.cat,
-        condition: item.condition,
-        location: item.location,
-        contact: item.contact,
-        ownerName: item.ownerName
-    }));
+    let text = "【同楼帮·我的闲置列表】\n\n";
+    myItems.forEach((item, index) => {
+        text += `${index + 1}. ${item.name}\n`;
+        text += `   分类：${item.cat}\n`;
+        text += `   成色：${item.condition}\n`;
+        text += `   地点：${item.location}\n`;
+        text += `   联系方式：${item.contact || "未填"}\n\n`;
+    });
+    text += `共 ${myItems.length} 件物品\n`;
     
-    const jsonStr = JSON.stringify({ items: simpleItems });
-    navigator.clipboard.writeText(jsonStr).then(() => {
-        alert(`✅ 已复制 ${simpleItems.length} 件物品\n发给队友导入即可。`);
+    navigator.clipboard.writeText(text).then(() => {
+        alert(`✅ 已复制 ${myItems.length} 件物品的信息\n发给队友，让他导入即可。`);
     }).catch(() => {
-        prompt("请复制以下数据发给队友：", jsonStr);
+        prompt("请复制以下内容发给队友：", text);
     });
 };
 
     // 导入数据功能
    // 导入数据功能（兼容简洁版）
+// 导入数据功能（支持纯文本）
 window.importData = function() {
-    const jsonStr = prompt("📋 请粘贴队友发给你的数据：");
-    if (!jsonStr) return;
-    try {
-        const data = JSON.parse(jsonStr);
-        
-        // 兼容两种格式：直接是数组，或者包含 items 字段
-        let newItems = [];
-        if (Array.isArray(data)) {
-            newItems = data;
-        } else if (data.items && Array.isArray(data.items)) {
-            newItems = data.items;
-        } else {
-            alert("数据格式错误，请重新复制");
+    const input = prompt("📋 请粘贴队友发给你的数据：");
+    if (!input) return;
+    
+    // 尝试解析为文本格式
+    const lines = input.split('\n');
+    let newItems = [];
+    let currentItem = {};
+    
+    for (let line of lines) {
+        if (line.match(/^\d+\./)) {
+            // 新物品开始
+            if (currentItem.name) {
+                newItems.push(currentItem);
+            }
+            currentItem = { name: line.replace(/^\d+\.\s*/, '').trim() };
+        } else if (line.includes('分类：')) {
+            currentItem.cat = line.split('分类：')[1].trim();
+        } else if (line.includes('成色：')) {
+            currentItem.condition = line.split('成色：')[1].trim();
+        } else if (line.includes('地点：')) {
+            currentItem.location = line.split('地点：')[1].trim();
+        } else if (line.includes('联系方式：')) {
+            currentItem.contact = line.split('联系方式：')[1].trim();
+            // 物品收集完成
+            newItems.push(currentItem);
+            currentItem = {};
+        }
+    }
+    
+    if (newItems.length === 0) {
+        // 尝试解析为 JSON 格式（兼容旧版）
+        try {
+            const data = JSON.parse(input);
+            let itemsToAdd = [];
+            if (Array.isArray(data)) itemsToAdd = data;
+            else if (data.items && Array.isArray(data.items)) itemsToAdd = data.items;
+            else if (data.items) itemsToAdd = [data.items];
+            
+            for (let item of itemsToAdd) {
+                newItems.push({
+                    name: item.name || item.title,
+                    cat: item.cat,
+                    condition: item.condition,
+                    location: item.location,
+                    contact: item.contact
+                });
+            }
+        } catch(e) {
+            alert("无法识别数据格式，请确保复制的是导出功能生成的内容");
             return;
         }
-        
-        let addedCount = 0;
-        for (let newItem of newItems) {
-            // 检查是否已存在（根据名称+发布者判断）
-            const exists = items.some(i => i.name === newItem.name && i.ownerName === newItem.ownerName);
-            if (!exists) {
-                items.push({
-                    id: Date.now() + Math.random(),
-                    name: newItem.name,
-                    cat: newItem.cat,
-                    condition: newItem.condition,
-                    location: newItem.location,
-                    contact: newItem.contact || "未填",
-                    ownerId: currentUser.id,
-                    ownerName: currentUser.name,
-                    images: [],
-                    desc: newItem.desc || ""
-                });
-                addedCount++;
-            }
+    }
+    
+    let addedCount = 0;
+    for (let newItem of newItems) {
+        if (!newItem.name) continue;
+        // 检查是否已存在
+        const exists = items.some(i => i.name === newItem.name && i.ownerId === currentUser.id);
+        if (!exists) {
+            items.push({
+                id: Date.now() + Math.random(),
+                name: newItem.name,
+                cat: newItem.cat || "其他",
+                condition: newItem.condition || "八成新",
+                location: newItem.location || "宿舍楼",
+                contact: newItem.contact || "未填",
+                ownerId: currentUser.id,
+                ownerName: currentUser.name,
+                images: [],
+                desc: ""
+            });
+            addedCount++;
         }
-        
-        if (addedCount > 0) {
-            saveItems();
-            alert(`✅ 导入成功！新增 ${addedCount} 件物品`);
-            renderHome();
-            renderProfile();
-            renderWanted();
-        } else {
-            alert("没有发现新物品，可能已经导入过了");
-        }
-    } catch(e) {
-        console.error(e);
-        alert("❌ 数据格式错误，请重新复制队友的数据");
+    }
+    
+    if (addedCount > 0) {
+        saveItems();
+        alert(`✅ 导入成功！新增 ${addedCount} 件物品`);
+        renderHome();
+        renderProfile();
+        renderWanted();
+    } else {
+        alert("没有发现新物品，可能已经导入过了");
     }
 };
 

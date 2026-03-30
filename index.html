@@ -2,780 +2,154 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>燕京理工学院 · 同楼帮 | 闲置+求购+信用</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>燕京理工学院 · 同楼帮 | 闲置交换站</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-        }
-        body {
-            background-color: #f5f7fb;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            padding-bottom: 70px;
-            color: #1f2d3d;
-        }
-        .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: white;
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            padding: 8px 16px 12px;
-            box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
-            border-top: 1px solid #e9ecef;
-            z-index: 100;
-        }
-        .nav-item {
-            text-align: center;
-            font-size: 12px;
-            color: #8c9aa8;
-            transition: color 0.2s;
-            cursor: pointer;
-            flex: 1;
-        }
-        .nav-item.active {
-            color: #2c7da0;
-            font-weight: 500;
-        }
-        .nav-icon {
-            font-size: 22px;
-            display: block;
-            margin-bottom: 2px;
-        }
-        .page {
-            display: none;
-            padding: 16px;
-            padding-bottom: 20px;
-        }
-        .page.active {
-            display: block;
-        }
-        .search-bar {
-            background: white;
-            border-radius: 30px;
-            padding: 8px 16px;
-            margin-bottom: 16px;
-            display: flex;
-            gap: 12px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-        }
-        .search-bar input {
-            flex: 1;
-            border: none;
-            outline: none;
-            font-size: 14px;
-            background: transparent;
-        }
-        .filter-chip {
-            background: #eef2f6;
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 13px;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            cursor: pointer;
-            margin-right: 8px;
-            margin-bottom: 8px;
-        }
-        .filter-chip.active {
-            background: #2c7da0;
-            color: white;
-        }
-        .toggle-switch {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: #eef2f6;
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 13px;
-            cursor: pointer;
-        }
-        .toggle-switch input {
-            width: 32px;
-            height: 18px;
-            appearance: none;
-            background: #cbd5e1;
-            border-radius: 20px;
-            position: relative;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-        .toggle-switch input:checked {
-            background: #2c7da0;
-        }
-        .toggle-switch input::before {
-            content: "";
-            width: 14px;
-            height: 14px;
-            background: white;
-            border-radius: 50%;
-            position: absolute;
-            top: 2px;
-            left: 2px;
-            transition: 0.2s;
-        }
-        .toggle-switch input:checked::before {
-            left: 16px;
-        }
-        .item-card, .wanted-card {
-            background: white;
-            border-radius: 16px;
-            padding: 12px;
-            margin-bottom: 12px;
-            display: flex;
-            gap: 12px;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.04);
-            transition: 0.2s;
-            cursor: pointer;
-        }
-        .item-img {
-            width: 80px;
-            height: 80px;
-            background: #eef2f6;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 32px;
-            flex-shrink: 0;
-            overflow: hidden;
-        }
-        .item-img img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        .item-info {
-            flex: 1;
-        }
-        .item-title {
-            font-weight: 600;
-            margin-bottom: 4px;
-        }
-        .item-desc {
-            font-size: 13px;
-            color: #5a6e7c;
-            margin-bottom: 8px;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
-        .item-tag {
-            background: #f0f3f8;
-            padding: 2px 8px;
-            border-radius: 12px;
-            font-size: 11px;
-        }
-        .item-contact {
-            font-size: 12px;
-            color: #2c7da0;
-            margin-top: 6px;
-        }
-        .credit-star {
-            font-size: 12px;
-            color: #f5a623;
-            margin-left: 6px;
-        }
-        .delete-btn {
-            color: #e55353;
-            font-size: 12px;
-            margin-left: 12px;
-            cursor: pointer;
-        }
-        .form-group {
-            margin-bottom: 20px;
-        }
-        .form-group label {
-            display: block;
-            font-size: 14px;
-            font-weight: 500;
-            margin-bottom: 6px;
-        }
-        .form-group input, .form-group select, .form-group textarea {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #e2e8f0;
-            border-radius: 12px;
-            font-size: 14px;
-            background: white;
-        }
-        .image-preview {
-            display: flex;
-            gap: 8px;
-            margin-top: 8px;
-            flex-wrap: wrap;
-        }
-        .image-preview img {
-            width: 80px;
-            height: 80px;
-            object-fit: cover;
-            border-radius: 8px;
-        }
-        .btn {
-            background: #2c7da0;
-            color: white;
-            border: none;
-            padding: 12px;
-            border-radius: 30px;
-            font-size: 16px;
-            font-weight: 500;
-            width: 100%;
-            cursor: pointer;
-            transition: 0.2s;
-            margin-top: 8px;
-        }
-        .btn-secondary {
-            background: #4caf50;
-        }
-        .btn-warning {
-            background: #ff9800;
-        }
-        .btn:active {
-            transform: scale(0.98);
-        }
-        .safety-tip {
-            font-size: 12px;
-            color: #8c9aa8;
-            text-align: center;
-            margin-top: 16px;
-        }
-        .empty-state {
-            text-align: center;
-            padding: 40px 20px;
-            color: #8c9aa8;
-        }
-        .campus-badge {
-            background: #eef2f6;
-            border-radius: 20px;
-            padding: 6px 12px;
-            font-size: 12px;
-            margin-bottom: 12px;
-            display: inline-block;
-        }
-        .detail-container {
-            background: white;
-            border-radius: 20px;
-            padding: 20px;
-            margin-bottom: 16px;
-        }
-        .detail-images {
-            display: flex;
-            gap: 8px;
-            overflow-x: auto;
-            margin-bottom: 16px;
-        }
-        .detail-images img {
-            width: 120px;
-            height: 120px;
-            object-fit: cover;
-            border-radius: 12px;
-        }
-        .detail-info p {
-            margin: 8px 0;
-        }
-        .location-selector {
-            background: white;
-            border-radius: 16px;
-            padding: 12px;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-        }
-        .location-selector label {
-            font-weight: 500;
-            font-size: 14px;
-        }
-        .location-selector select {
-            flex: 1;
-            padding: 8px;
-            border-radius: 20px;
-            border: 1px solid #e2e8f0;
-            background: white;
-            font-size: 14px;
-        }
-        .button-group {
-            display: flex;
-            gap: 12px;
-            margin-bottom: 20px;
-        }
-        .button-group .btn {
-            margin-top: 0;
-        }
-        .copy-contact {
-            color: #2c7da0;
-            cursor: pointer;
-            text-decoration: underline;
-            font-weight: 500;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: #f5f7fb; font-family: system-ui, -apple-system; padding-bottom: 70px; }
+        .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: white; display: flex; justify-content: space-around; padding: 8px 0 12px; border-top: 1px solid #eee; z-index: 100; }
+        .nav-item { text-align: center; font-size: 12px; cursor: pointer; color: #8c9aa8; flex: 1; }
+        .nav-item.active { color: #2c7da0; font-weight: 500; }
+        .page { display: none; padding: 16px; }
+        .page.active { display: block; }
+        .search-bar { background: white; border-radius: 30px; padding: 8px 16px; margin-bottom: 16px; display: flex; gap: 12px; }
+        .search-bar input { flex: 1; border: none; outline: none; }
+        .filter-chip { background: #eef2f6; padding: 6px 12px; border-radius: 20px; font-size: 13px; display: inline-block; cursor: pointer; margin-right: 8px; margin-bottom: 8px; }
+        .filter-chip.active { background: #2c7da0; color: white; }
+        .toggle-switch { display: inline-flex; align-items: center; gap: 8px; background: #eef2f6; padding: 6px 12px; border-radius: 20px; font-size: 12px; cursor: pointer; }
+        .item-card, .wanted-card { background: white; border-radius: 16px; padding: 12px; margin-bottom: 12px; display: flex; gap: 12px; cursor: pointer; box-shadow: 0 2px 6px rgba(0,0,0,0.04); }
+        .item-img { width: 70px; height: 70px; background: #eef2f6; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 28px; flex-shrink: 0; overflow: hidden; }
+        .item-img img { width: 100%; height: 100%; object-fit: cover; }
+        .item-info { flex: 1; }
+        .item-title { font-weight: 600; }
+        .item-desc { font-size: 12px; color: #666; margin: 4px 0; display: flex; flex-wrap: wrap; gap: 6px; }
+        .item-tag { background: #f0f3f8; padding: 2px 8px; border-radius: 12px; font-size: 11px; }
+        .item-contact { font-size: 11px; color: #2c7da0; margin-top: 4px; }
+        .delete-btn { color: #e55353; cursor: pointer; font-size: 12px; }
+        .form-group { margin-bottom: 16px; }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 12px; }
+        .image-preview { display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
+        .image-preview img { width: 70px; height: 70px; object-fit: cover; border-radius: 8px; }
+        .btn { background: #2c7da0; color: white; border: none; padding: 12px; border-radius: 30px; font-size: 16px; width: 100%; cursor: pointer; margin-top: 8px; }
+        .safety-tip { font-size: 11px; color: gray; text-align: center; margin-top: 12px; }
+        .empty-state { text-align: center; padding: 40px; color: gray; }
+        .campus-badge { background: #eef2f6; border-radius: 20px; padding: 6px 12px; font-size: 12px; display: inline-block; margin-bottom: 12px; }
+        .detail-container { background: white; border-radius: 20px; padding: 20px; }
+        .detail-images { display: flex; gap: 8px; overflow-x: auto; margin-bottom: 16px; }
+        .detail-images img { width: 100px; height: 100px; object-fit: cover; border-radius: 12px; }
+        .location-selector { background: white; border-radius: 16px; padding: 12px; margin-bottom: 16px; display: flex; align-items: center; gap: 12px; }
+        .copy-contact { color: #2c7da0; cursor: pointer; text-decoration: underline; }
     </style>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 
 <div class="bottom-nav">
-    <div class="nav-item" data-page="home">
-        <span class="nav-icon">🏠</span>
-        <span>找闲置</span>
-    </div>
-    <div class="nav-item" data-page="wanted">
-        <span class="nav-icon">📢</span>
-        <span>求购</span>
-    </div>
-    <div class="nav-item" data-page="publish">
-        <span class="nav-icon">📤</span>
-        <span>发闲置</span>
-    </div>
-    <div class="nav-item" data-page="publishWanted">
-        <span class="nav-icon">✏️</span>
-        <span>发求购</span>
-    </div>
-    <div class="nav-item" data-page="profile">
-        <span class="nav-icon">👤</span>
-        <span>我的</span>
-    </div>
+    <div class="nav-item" data-page="home">🏠 找闲置</div>
+    <div class="nav-item" data-page="wanted">📢 求购</div>
+    <div class="nav-item" data-page="publish">📤 发闲置</div>
+    <div class="nav-item" data-page="publishWanted">✏️ 发求购</div>
+    <div class="nav-item" data-page="profile">👤 我的</div>
 </div>
 
-<!-- 页面：找闲置 -->
 <div id="homePage" class="page active">
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
         <div class="campus-badge">📍 燕京理工学院 · 闲置站</div>
-        <div class="toggle-switch" id="dormToggle">
-            <span>🏠 只看同地点</span>
-            <input type="checkbox" id="sameLocationOnly">
-        </div>
+        <div class="toggle-switch"><span>🏠 只看同地点</span><input type="checkbox" id="sameLocationOnly"></div>
     </div>
-    <div class="search-bar">
-        <input type="text" id="searchInput" placeholder="搜索物品...">
-        <span>🔍</span>
-    </div>
-    <div style="display: flex; flex-wrap: wrap; margin-bottom: 12px;">
+    <div class="search-bar"><input type="text" id="searchInput" placeholder="搜索物品..."><span>🔍</span></div>
+    <div style="margin-bottom: 12px;">
         <span class="filter-chip" data-cat="all">全部</span>
         <span class="filter-chip" data-cat="教材">📚 教材</span>
         <span class="filter-chip" data-cat="数码">💻 数码</span>
-        <span class="filter-chip" data-cat="宿舍">🛏️ 宿舍好物</span>
-        <span class="filter-chip" data-cat="美妆">💄 美妆服饰</span>
+        <span class="filter-chip" data-cat="宿舍">🛏️ 宿舍</span>
+        <span class="filter-chip" data-cat="美妆">💄 美妆</span>
         <span class="filter-chip" data-cat="其他">🎁 其他</span>
     </div>
     <div id="itemsList"></div>
-    <div class="safety-tip">⚠️ 交易建议当面核对，谨防诈骗</div>
+    <div class="safety-tip">⚠️ 交易当面核对，谨防诈骗</div>
 </div>
 
-<!-- 页面：求购列表 -->
 <div id="wantedPage" class="page">
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-        <div class="campus-badge">📢 校园求购 · 帮你找</div>
-        <div class="toggle-switch" id="wantedLocationToggle">
-            <span>🏠 只看同地点</span>
-            <input type="checkbox" id="wantedSameLocationOnly">
-        </div>
+    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+        <div class="campus-badge">📢 校园求购</div>
+        <div class="toggle-switch"><span>🏠 只看同地点</span><input type="checkbox" id="wantedSameLocationOnly"></div>
     </div>
-    <div class="search-bar">
-        <input type="text" id="wantedSearchInput" placeholder="搜索求购...">
-        <span>🔍</span>
-    </div>
+    <div class="search-bar"><input type="text" id="wantedSearchInput" placeholder="搜索求购..."><span>🔍</span></div>
     <div id="wantedList"></div>
-    <div class="safety-tip">💡 看到想要的？联系发布者吧</div>
 </div>
 
-<!-- 页面：发布闲置 -->
 <div id="publishPage" class="page">
     <form id="publishForm">
-        <div class="form-group">
-            <label>物品名称 *</label>
-            <input type="text" id="itemName" required>
-        </div>
-        <div class="form-group">
-            <label>分类 *</label>
-            <select id="itemCat">
-                <option value="教材">📚 教材资料</option>
-                <option value="数码">💻 数码外设</option>
-                <option value="宿舍">🛏️ 宿舍好物</option>
-                <option value="美妆">💄 美妆服饰</option>
-                <option value="其他">🎁 其他</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <label>成色</label>
-            <select id="itemCondition">
-                <option>九成新</option>
-                <option>八成新</option>
-                <option>七成新</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <label>描述（可选）</label>
-            <textarea id="itemDesc" rows="2" placeholder="附赠笔记、可换物等"></textarea>
-        </div>
-        <div class="form-group">
-            <label>图片（最多3张）</label>
-            <input type="file" id="itemImages" accept="image/*" multiple>
-            <div class="image-preview" id="imagePreview"></div>
-        </div>
-        <div class="form-group">
-            <label>物品所在地点 *</label>
-            <select id="campusLocation">
-                <option value="宿舍楼">🏢 宿舍楼</option>
-                <option value="M楼">🏛️ M楼</option>
-                <option value="D楼">🏛️ D楼</option>
-                <option value="实训楼">🔧 实训楼</option>
-                <option value="综合楼">🏢 综合楼</option>
-                <option value="艺术楼">🎨 艺术楼</option>
-                <option value="办公楼">📄 办公楼</option>
-                <option value="报告厅">🎤 报告厅</option>
-                <option value="商业街">🛍️ 商业街</option>
-                <option value="篮球场">🏀 篮球场</option>
-                <option value="足球场">⚽ 足球场</option>
-                <option value="高尔夫球场">⛳ 高尔夫球场</option>
-                <option value="教师公寓">🏠 教师公寓</option>
-                <option value="启航大道">🚏 启航大道</option>
-                <option value="智汇路">📖 智汇路</option>
-                <option value="多驿站">📮 多驿站</option>
-                <option value="南1门">🚪 南1门</option>
-                <option value="南2门">🚪 南2门</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <label>联系方式（微信号/手机号）</label>
-            <input type="text" id="contact" placeholder="选填，用于交易联系">
-        </div>
-        <div class="safety-tip" style="margin-top: -12px; margin-bottom: 12px;">🔒 联系方式不会直接显示，其他用户需主动联系你</div>
-        <button type="submit" class="btn">发布闲置</button>
-        <div class="safety-tip">🔒 图片将自动压缩，仅用于展示</div>
+        <div class="form-group"><label>物品名称 *</label><input type="text" id="itemName" required></div>
+        <div class="form-group"><label>分类 *</label><select id="itemCat"><option value="教材">📚 教材</option><option value="数码">💻 数码</option><option value="宿舍">🛏️ 宿舍</option><option value="美妆">💄 美妆</option><option value="其他">🎁 其他</option></select></div>
+        <div class="form-group"><label>成色</label><select id="itemCondition"><option>九成新</option><option>八成新</option><option>七成新</option></select></div>
+        <div class="form-group"><label>描述</label><textarea id="itemDesc" rows="2"></textarea></div>
+        <div class="form-group"><label>图片（最多3张）</label><input type="file" id="itemImages" accept="image/*" multiple><div class="image-preview" id="imagePreview"></div></div>
+        <div class="form-group"><label>地点 *</label><select id="campusLocation"><option value="宿舍楼">宿舍楼</option><option value="M楼">M楼</option><option value="D楼">D楼</option><option value="实训楼">实训楼</option><option value="综合楼">综合楼</option><option value="艺术楼">艺术楼</option><option value="商业街">商业街</option><option value="篮球场">篮球场</option><option value="足球场">足球场</option></select></div>
+        <div class="form-group"><label>联系方式</label><input type="text" id="contact" placeholder="微信号/手机号"></div>
+        <div class="safety-tip">🔒 联系方式不会直接显示</div>
+        <button type="submit" class="btn">✨ 发布闲置</button>
     </form>
 </div>
 
-<!-- 页面：发布求购 -->
 <div id="publishWantedPage" class="page">
     <form id="publishWantedForm">
-        <div class="form-group">
-            <label>求购标题 *</label>
-            <input type="text" id="wantedTitle" required placeholder="例：求购考研数学笔记">
-        </div>
-        <div class="form-group">
-            <label>分类</label>
-            <select id="wantedCat">
-                <option value="教材">📚 教材</option>
-                <option value="数码">💻 数码</option>
-                <option value="宿舍">🛏️ 宿舍好物</option>
-                <option value="美妆">💄 美妆服饰</option>
-                <option value="其他">🎁 其他</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <label>详细描述</label>
-            <textarea id="wantedDesc" rows="2" placeholder="具体需求、预算等"></textarea>
-        </div>
-        <div class="form-group">
-            <label>期望地点 *</label>
-            <select id="wantedLocation">
-                <option value="宿舍楼">🏢 宿舍楼</option>
-                <option value="M楼">🏛️ M楼</option>
-                <option value="D楼">🏛️ D楼</option>
-                <option value="实训楼">🔧 实训楼</option>
-                <option value="综合楼">🏢 综合楼</option>
-                <option value="艺术楼">🎨 艺术楼</option>
-                <option value="办公楼">📄 办公楼</option>
-                <option value="报告厅">🎤 报告厅</option>
-                <option value="商业街">🛍️ 商业街</option>
-                <option value="篮球场">🏀 篮球场</option>
-                <option value="足球场">⚽ 足球场</option>
-                <option value="高尔夫球场">⛳ 高尔夫球场</option>
-                <option value="教师公寓">🏠 教师公寓</option>
-                <option value="启航大道">🚏 启航大道</option>
-                <option value="智汇路">📖 智汇路</option>
-                <option value="多驿站">📮 多驿站</option>
-                <option value="南1门">🚪 南1门</option>
-                <option value="南2门">🚪 南2门</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <label>联系方式</label>
-            <input type="text" id="wantedContact" placeholder="微信/手机号（选填）">
-        </div>
-        <button type="submit" class="btn">发布求购</button>
+        <div class="form-group"><label>求购标题 *</label><input type="text" id="wantedTitle" required></div>
+        <div class="form-group"><label>分类</label><select id="wantedCat"><option value="教材">📚 教材</option><option value="数码">💻 数码</option><option value="宿舍">🛏️ 宿舍</option><option value="美妆">💄 美妆</option><option value="其他">🎁 其他</option></select></div>
+        <div class="form-group"><label>详细描述</label><textarea id="wantedDesc" rows="2"></textarea></div>
+        <div class="form-group"><label>期望地点 *</label><select id="wantedLocation"><option value="宿舍楼">宿舍楼</option><option value="M楼">M楼</option><option value="D楼">D楼</option><option value="实训楼">实训楼</option><option value="综合楼">综合楼</option><option value="艺术楼">艺术楼</option><option value="商业街">商业街</option><option value="篮球场">篮球场</option><option value="足球场">足球场</option></select></div>
+        <div class="form-group"><label>联系方式</label><input type="text" id="wantedContact" placeholder="微信号/手机号"></div>
+        <button type="submit" class="btn">📢 发布求购</button>
     </form>
 </div>
 
-<!-- 页面：我的 -->
 <div id="profilePage" class="page">
     <div class="location-selector">
-        <label>📍 我的当前位置：</label>
+        <span>📍 我的位置：</span>
         <select id="myLocationSelect">
-            <option value="宿舍楼">🏢 宿舍楼</option>
-            <option value="M楼">🏛️ M楼</option>
-            <option value="D楼">🏛️ D楼</option>
-            <option value="实训楼">🔧 实训楼</option>
-            <option value="综合楼">🏢 综合楼</option>
-            <option value="艺术楼">🎨 艺术楼</option>
-            <option value="办公楼">📄 办公楼</option>
-            <option value="报告厅">🎤 报告厅</option>
-            <option value="商业街">🛍️ 商业街</option>
-            <option value="篮球场">🏀 篮球场</option>
-            <option value="足球场">⚽ 足球场</option>
-            <option value="高尔夫球场">⛳ 高尔夫球场</option>
-            <option value="教师公寓">🏠 教师公寓</option>
-            <option value="启航大道">🚏 启航大道</option>
-            <option value="智汇路">📖 智汇路</option>
-            <option value="多驿站">📮 多驿站</option>
-            <option value="南1门">🚪 南1门</option>
-            <option value="南2门">🚪 南2门</option>
+            <option value="宿舍楼">宿舍楼</option><option value="M楼">M楼</option><option value="D楼">D楼</option>
+            <option value="实训楼">实训楼</option><option value="综合楼">综合楼</option><option value="艺术楼">艺术楼</option>
+            <option value="商业街">商业街</option><option value="篮球场">篮球场</option><option value="足球场">足球场</option>
         </select>
     </div>
-    
-    <!-- 导入/导出按钮组 -->
-    <div class="button-group">
-        <button class="btn btn-secondary" onclick="exportData()">📤 导出数据</button>
-        <button class="btn btn-warning" onclick="importData()">📥 导入数据</button>
-    </div>
-    
     <h3>📦 我发布的闲置</h3>
     <div id="myItemsList"></div>
-    <h3 style="margin-top: 24px;">📢 我发布的求购</h3>
+    <h3 style="margin-top: 20px;">📢 我发布的求购</h3>
     <div id="myWantedList"></div>
-    <div class="safety-tip">⭐ 当前信用分: <span id="myCredit">100</span> (评价他人+5, 被评价+5)</div>
-    <div class="safety-tip">💡 提示：导出数据可分享给队友，导入队友数据即可看到对方发布的物品</div>
+    <div class="safety-tip">⭐ 信用分: <span id="myCredit">100</span></div>
 </div>
 
-<!-- 详情页 -->
 <div id="detailPage" class="page"></div>
 
 <script>
-    // ---------- 用户信息 ----------
-    let currentUser = {
-        id: "currentUser",
-        name: "我",
-        location: "宿舍楼",
-        credit: 100
-    };
-
-    // 存储key
-    const STORAGE_ITEMS = "yitong_items_v5";
-    const STORAGE_WANTED = "yitong_wanted_v5";
-    const STORAGE_CREDITS = "yitong_credits_v5";
-    const STORAGE_EVALUATED = "yitong_evaluated_v5";
-    const STORAGE_USER_LOCATION = "yitong_user_location";
-
+    // Supabase 配置
+    const SUPABASE_URL = "https://yklqmbsjqxfosmygjmtk.supabase.co";
+    const SUPABASE_ANON_KEY = "sb_publishable_a5DI2BTOoGEDu90y-mY9ww_KuCAAo2D";
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    
+    let currentUser = { id: "", name: "", location: "宿舍楼", credit: 100 };
     let items = [];
     let wantedList = [];
-    let creditScores = {};
-    let evaluatedItems = {};
-
-    // 演示物品列表
-    const DEMO_ITEMS = [
-        { id: 1001, name: "考研数学真题集", cat: "教材", condition: "九成新", desc: "附赠笔记", location: "M楼", contact: "wx_zhangsan123", ownerId: "user_demo1", ownerName: "张三", images: [] },
-        { id: 1002, name: "宿舍小夜灯", cat: "宿舍", condition: "八成新", desc: "USB充电", location: "宿舍楼", contact: "lisi_2024", ownerId: "user_demo2", ownerName: "李四", images: [] },
-        { id: 1003, name: "六级词汇书", cat: "教材", condition: "七成新", desc: "可换物", location: "D楼", contact: "wangwu_123", ownerId: "user_demo3", ownerName: "王五", images: [] },
-        { id: 1004, name: "篮球", cat: "其他", condition: "九成新", desc: "斯伯丁", location: "篮球场", contact: "zhaoliu_2024", ownerId: "user_demo4", ownerName: "赵六", images: [] }
-    ];
-
-    function ensureDemoItems() {
-        for (let demo of DEMO_ITEMS) {
-            if (!items.some(item => item.id === demo.id)) {
-                items.push(demo);
+    
+    async function initUser() {
+        let userId = localStorage.getItem("userId");
+        if (userId) {
+            const { data, error } = await supabase.from('users').select('*').eq('id', userId).single();
+            if (data && !error) {
+                currentUser = { id: data.id, name: data.name, location: data.location || "宿舍楼", credit: data.credit || 100 };
+                document.getElementById("myCredit").innerText = currentUser.credit;
+                document.getElementById("myLocationSelect").value = currentUser.location;
+                return;
             }
         }
-        saveItems();
-    }
-
-    function loadData() {
-        const storedItems = localStorage.getItem(STORAGE_ITEMS);
-        if (storedItems) {
-            items = JSON.parse(storedItems);
-        } else {
-            items = [];
-        }
-        ensureDemoItems();
-
-        const storedWanted = localStorage.getItem(STORAGE_WANTED);
-        if (storedWanted) wantedList = JSON.parse(storedWanted);
-        else wantedList = [];
-
-        const storedCredits = localStorage.getItem(STORAGE_CREDITS);
-        if (storedCredits) creditScores = JSON.parse(storedCredits);
-        else {
-            creditScores = {
-                currentUser: 100,
-                user_demo1: 95,
-                user_demo2: 88,
-                user_demo3: 102,
-                user_demo4: 76
-            };
-            saveCredits();
-        }
-
-        const storedEval = localStorage.getItem(STORAGE_EVALUATED);
-        if (storedEval) evaluatedItems = JSON.parse(storedEval);
-        else evaluatedItems = {};
-
-        const savedLocation = localStorage.getItem(STORAGE_USER_LOCATION);
-        if (savedLocation) currentUser.location = savedLocation;
-        else currentUser.location = "宿舍楼";
-        if (creditScores[currentUser.id] !== undefined) currentUser.credit = creditScores[currentUser.id];
-        else creditScores[currentUser.id] = 100;
-        document.getElementById("myCredit").innerText = currentUser.credit;
-        const locationSelect = document.getElementById("myLocationSelect");
-        if (locationSelect) locationSelect.value = currentUser.location;
-    }
-
-    function saveItems() { localStorage.setItem(STORAGE_ITEMS, JSON.stringify(items)); }
-    function saveWanted() { localStorage.setItem(STORAGE_WANTED, JSON.stringify(wantedList)); }
-    function saveCredits() { localStorage.setItem(STORAGE_CREDITS, JSON.stringify(creditScores)); }
-    function saveEvaluated() { localStorage.setItem(STORAGE_EVALUATED, JSON.stringify(evaluatedItems)); }
-    function saveUserLocation() { localStorage.setItem(STORAGE_USER_LOCATION, currentUser.location); }
-
-    function getCredit(userId) { return creditScores[userId] || 80; }
-
-    // 导出数据功能
-   // 导出数据功能（简洁版）
-// 导出数据功能（纯文本版）
-// 导出数据功能（包含图片）
-window.exportData = function() {
-    const myItems = items.filter(item => item.ownerId === currentUser.id);
-    
-    if (myItems.length === 0) {
-        alert("你还没有发布过物品，暂无数据可导出");
-        return;
+        const newUserId = crypto.randomUUID();
+        const newUserName = "同学" + Math.floor(Math.random() * 1000);
+        await supabase.from('users').insert([{ id: newUserId, name: newUserName, location: "宿舍楼", credit: 100 }]);
+        currentUser = { id: newUserId, name: newUserName, location: "宿舍楼", credit: 100 };
+        localStorage.setItem("userId", newUserId);
     }
     
-    // 导出完整数据（包含图片）
-    const fullItems = myItems.map(item => ({
-        name: item.name,
-        cat: item.cat,
-        condition: item.condition,
-        location: item.location,
-        contact: item.contact,
-        ownerName: item.ownerName,
-        desc: item.desc || "",
-        images: item.images || []  // 图片数据（Base64格式）
-    }));
-    
-    const data = { 
-        items: fullItems,
-        version: "2.0",
-        hasImages: true
-    };
-    const jsonStr = JSON.stringify(data);
-    
-    // 提示数据大小
-    const sizeKB = (jsonStr.length / 1024).toFixed(1);
-    navigator.clipboard.writeText(jsonStr).then(() => {
-        alert(`✅ 已复制 ${myItems.length} 件物品（含图片，约 ${sizeKB} KB）\n发给队友导入即可。`);
-    }).catch(() => {
-        prompt("请复制以下数据发给队友：", jsonStr);
-    });
-};
-
-    // 导入数据功能
-   // 导入数据功能（兼容简洁版）
-// 导入数据功能（支持纯文本）
-// 导入数据功能（支持图片）
-window.importData = function() {
-    const input = prompt("📋 请粘贴队友发给你的数据：");
-    if (!input) return;
-    
-    try {
-        const data = JSON.parse(input);
-        
-        // 兼容不同版本的数据格式
-        let newItems = [];
-        if (Array.isArray(data)) {
-            newItems = data;
-        } else if (data.items && Array.isArray(data.items)) {
-            newItems = data.items;
-        } else if (data.items) {
-            newItems = [data.items];
-        } else {
-            alert("数据格式错误，请重新复制");
-            return;
-        }
-        
-        let addedCount = 0;
-        let hasImages = data.version === "2.0" || newItems.some(item => item.images && item.images.length > 0);
-        
-        for (let newItem of newItems) {
-            if (!newItem.name) continue;
-            
-            // 检查是否已存在（根据名称+发布者判断）
-            const exists = items.some(i => i.name === newItem.name && i.ownerId === currentUser.id);
-            if (!exists) {
-                items.push({
-                    id: Date.now() + Math.random(),
-                    name: newItem.name,
-                    cat: newItem.cat || "其他",
-                    condition: newItem.condition || "八成新",
-                    location: newItem.location || "宿舍楼",
-                    contact: newItem.contact || "未填",
-                    ownerId: currentUser.id,
-                    ownerName: currentUser.name,
-                    images: newItem.images || [],  // 恢复图片
-                    desc: newItem.desc || ""
-                });
-                addedCount++;
-            }
-        }
-        
-        if (addedCount > 0) {
-            saveItems();
-            if (hasImages) {
-                alert(`✅ 导入成功！新增 ${addedCount} 件物品（含图片）`);
-            } else {
-                alert(`✅ 导入成功！新增 ${addedCount} 件物品`);
-            }
-            renderHome();
-            renderProfile();
-            renderWanted();
-        } else {
-            alert("没有发现新物品，可能已经导入过了");
-        }
-    } catch(e) {
-        console.error(e);
-        alert("❌ 数据格式错误，请重新复制队友的数据");
-    }
-};
-
-    // 复制联系方式
-    window.copyContact = function(contact) {
-        navigator.clipboard.writeText(contact).then(() => {
-            alert(`✅ 已复制联系方式：${contact}\n\n请去微信/QQ添加对方。`);
-        }).catch(() => {
-            alert(`请联系发布者，联系方式：${contact}`);
-        });
-    };
-
-    // 确认评价（防误点）
-    window.confirmEvaluate = function(itemId, sellerId) {
-        if (confirm("确认已完成与这位同学的交易吗？\n\n评价后双方信用分各+5，且不可撤销。")) {
-            window.evaluateItemHandler(itemId, sellerId);
-        }
-    };
-
-    // 评价处理函数
-    window.evaluateItemHandler = function(itemId, sellerId) {
-        if (evaluatedItems[itemId]) { alert("你已经评价过此物品了"); return false; }
-        if (sellerId === currentUser.id) { alert("不能评价自己发布的物品"); return false; }
-        creditScores[sellerId] = (creditScores[sellerId] || 80) + 5;
-        creditScores[currentUser.id] = (creditScores[currentUser.id] || 100) + 5;
-        saveCredits();
-        evaluatedItems[itemId] = true;
-        saveEvaluated();
-        currentUser.credit = creditScores[currentUser.id];
-        document.getElementById("myCredit").innerText = currentUser.credit;
-        alert("评价成功！双方信用分各+5");
-        renderHome();
-        showItemDetail(itemId);
-        return true;
-    };
-
-    // 图片压缩
     function compressImage(file, maxSizeKB = 200) {
         return new Promise((resolve) => {
             const reader = new FileReader();
@@ -805,83 +179,23 @@ window.importData = function() {
             };
         });
     }
-
-    // 发布闲置
-    document.getElementById("publishForm").addEventListener("submit", async (e) => {
-        e.preventDefault();
-        const name = document.getElementById("itemName").value.trim();
-        if (!name) return alert("请输入物品名称");
-        const cat = document.getElementById("itemCat").value;
-        const condition = document.getElementById("itemCondition").value;
-        const desc = document.getElementById("itemDesc").value;
-        const location = document.getElementById("campusLocation").value;
-        const contact = document.getElementById("contact").value.trim();
-        const files = document.getElementById("itemImages").files;
-        let images = [];
-        for (let i = 0; i < Math.min(files.length, 3); i++) {
-            const compressed = await compressImage(files[i], 200);
-            images.push(compressed);
-        }
-        const newItem = {
-            id: Date.now(),
-            name, cat, condition, desc, location, contact: contact || "未填",
-            ownerId: currentUser.id,
-            ownerName: currentUser.name,
-            images: images,
-            createTime: new Date().toISOString()
-        };
-        items.push(newItem);
-        saveItems();
-        alert("发布成功");
-        document.getElementById("publishForm").reset();
-        document.getElementById("imagePreview").innerHTML = "";
-        switchPage("home");
-    });
-
-    document.getElementById("itemImages").addEventListener("change", function() {
-        const preview = document.getElementById("imagePreview");
-        preview.innerHTML = "";
-        const files = Array.from(this.files);
-        for (let i = 0; i < Math.min(files.length, 3); i++) {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                const img = document.createElement("img");
-                img.src = e.target.result;
-                preview.appendChild(img);
-            };
-            reader.readAsDataURL(files[i]);
-        }
-    });
-
-    // 发布求购
-    document.getElementById("publishWantedForm").addEventListener("submit", (e) => {
-        e.preventDefault();
-        const title = document.getElementById("wantedTitle").value.trim();
-        if (!title) return alert("请输入标题");
-        const cat = document.getElementById("wantedCat").value;
-        const desc = document.getElementById("wantedDesc").value;
-        const location = document.getElementById("wantedLocation").value;
-        const contact = document.getElementById("wantedContact").value.trim();
-        const newWanted = {
-            id: Date.now(),
-            title, cat, desc, location, contact: contact || "未填",
-            ownerId: currentUser.id,
-            ownerName: currentUser.name,
-            createTime: new Date().toISOString()
-        };
-        wantedList.push(newWanted);
-        saveWanted();
-        alert("求购发布成功");
-        document.getElementById("publishWantedForm").reset();
-        switchPage("wanted");
-    });
-
-    // 渲染闲置列表
+    
+    async function loadItems() {
+        const { data, error } = await supabase.from('items').select('*').order('created_at', { ascending: false });
+        return error ? [] : data || [];
+    }
+    
+    async function loadWanted() {
+        const { data, error } = await supabase.from('wanted').select('*').order('created_at', { ascending: false });
+        return error ? [] : data || [];
+    }
+    
     let currentCat = "all", searchKeyword = "", sameLocationOnly = false;
-    function renderHome() {
+    async function renderHome() {
+        items = await loadItems();
         let filtered = items.filter(item => {
             if (currentCat !== "all" && item.cat !== currentCat) return false;
-            if (searchKeyword && !item.name.includes(searchKeyword) && !(item.desc && item.desc.includes(searchKeyword))) return false;
+            if (searchKeyword && !item.name.includes(searchKeyword) && !(item.description && item.description.includes(searchKeyword))) return false;
             if (sameLocationOnly && item.location !== currentUser.location) return false;
             return true;
         });
@@ -889,147 +203,198 @@ window.importData = function() {
         if (filtered.length === 0) { container.innerHTML = '<div class="empty-state">✨ 没有找到闲置，去发布一个吧</div>'; return; }
         let html = "";
         filtered.forEach(item => {
-            const credit = getCredit(item.ownerId);
-            html += `<div class="item-card" data-id="${item.id}" data-type="item">
+            html += `<div class="item-card" onclick="showItemDetail('${item.id}')">
                         <div class="item-img">${item.images && item.images[0] ? `<img src="${item.images[0]}" />` : '📦'}</div>
                         <div class="item-info">
-                            <div class="item-title">${escapeHtml(item.name)} <span class="credit-star">⭐${credit}</span></div>
-                            <div class="item-desc">
-                                <span class="item-tag">${item.cat}</span>
-                                <span class="item-tag">${item.condition}</span>
-                                ${item.desc ? `<span class="item-tag">${escapeHtml(item.desc)}</span>` : ''}
-                            </div>
-                            <div class="item-contact">📍 ${item.location} | ✉️ 私信联系</div>
+                            <div class="item-title">${escapeHtml(item.name)}</div>
+                            <div class="item-desc"><span class="item-tag">${item.cat}</span><span class="item-tag">${item.condition}</span>${item.description ? `<span class="item-tag">${escapeHtml(item.description)}</span>` : ''}</div>
+                            <div class="item-contact">📍 ${item.location} | 👤 ${item.owner_name}</div>
                         </div>
                     </div>`;
         });
         container.innerHTML = html;
-        document.querySelectorAll('.item-card').forEach(card => {
-            card.addEventListener('click', (e) => {
-                const id = parseInt(card.getAttribute('data-id'));
-                const type = card.getAttribute('data-type');
-                if (type === 'item') showItemDetail(id);
-            });
-        });
     }
-
-    // 显示闲置详情
-    function showItemDetail(id) {
+    
+    window.showItemDetail = async function(id) {
         const item = items.find(i => i.id === id);
         if (!item) return;
-        const sellerCredit = getCredit(item.ownerId);
-        const alreadyEvaluated = evaluatedItems[item.id] || false;
-        const isOwner = (item.ownerId === currentUser.id);
-        
-        // 联系方式显示：如果有联系方式，显示复制按钮；否则提示未留
-        let contactHtml = '';
-        if (item.contact && item.contact !== '未填') {
-            contactHtml = `<span class="copy-contact" onclick="copyContact('${escapeHtml(item.contact)}')">📋 复制联系方式（微信/手机号）</span>`;
-        } else {
-            contactHtml = '<span style="color:#8c9aa8;">卖家未留联系方式</span>';
-        }
-        
+        let contactHtml = item.contact && item.contact !== '未填' ? `<span class="copy-contact" onclick="copyContact('${escapeHtml(item.contact)}')">📋 复制联系方式</span>` : '<span style="color:gray;">未留联系方式</span>';
+        let imagesHtml = item.images && item.images.length ? `<div class="detail-images">${item.images.map(img => `<img src="${img}" />`).join('')}</div>` : '';
         let detailHtml = `
             <div class="detail-container">
-                <div class="detail-images">
-                    ${item.images && item.images.length ? item.images.map(img => `<img src="${img}" />`).join('') : '<div>暂无图片</div>'}
-                </div>
+                ${imagesHtml}
                 <div class="detail-info">
-                    <p><strong>${escapeHtml(item.name)}</strong> <span class="credit-star">⭐${sellerCredit}</span></p>
+                    <p><strong>${escapeHtml(item.name)}</strong></p>
                     <p>分类：${item.cat} | 成色：${item.condition}</p>
                     <p>地点：${item.location}</p>
-                    <p>描述：${escapeHtml(item.desc) || '无'}</p>
-                    <p>发布者：${item.ownerName}</p>
+                    <p>描述：${escapeHtml(item.description) || '无'}</p>
+                    <p>发布者：${item.owner_name}</p>
                     <p>联系方式：${contactHtml}</p>
-                    ${!isOwner && !alreadyEvaluated ? `<button class="btn" onclick="confirmEvaluate(${item.id}, '${item.ownerId}')">👍 确认完成交易并评价（双方信用+5）</button>` : ''}
-                    ${alreadyEvaluated ? '<p>✅ 已评价过，感谢你的反馈</p>' : ''}
+                    ${item.owner_id !== currentUser.id ? `<button class="btn" onclick="confirmEvaluate('${item.id}', '${item.owner_id}')">👍 确认完成交易并评价（信用+5）</button>` : ''}
                     <button class="btn" onclick="switchPage('home')">返回</button>
                 </div>
             </div>
         `;
-        const detailPage = document.getElementById("detailPage");
-        detailPage.innerHTML = detailHtml;
+        document.getElementById("detailPage").innerHTML = detailHtml;
         switchPage("detail");
-    }
-
-    // 求购列表渲染
+    };
+    
+    window.copyContact = function(contact) {
+        navigator.clipboard.writeText(contact).then(() => alert(`✅ 已复制：${contact}\n请去微信添加对方`));
+    };
+    
+    window.confirmEvaluate = async function(itemId, sellerId) {
+        if (confirm("确认已完成交易？\n评价后双方信用分各+5")) {
+            const { data: seller } = await supabase.from('users').select('credit').eq('id', sellerId).single();
+            const { data: buyer } = await supabase.from('users').select('credit').eq('id', currentUser.id).single();
+            if (seller) await supabase.from('users').update({ credit: (seller.credit || 80) + 5 }).eq('id', sellerId);
+            if (buyer) {
+                await supabase.from('users').update({ credit: (buyer.credit || 100) + 5 }).eq('id', currentUser.id);
+                currentUser.credit = (buyer.credit || 100) + 5;
+                document.getElementById("myCredit").innerText = currentUser.credit;
+            }
+            alert("评价成功！信用分+5");
+            await renderHome();
+            switchPage("home");
+        }
+    };
+    
     let wantedSearch = "", wantedSameLocation = false;
-    function renderWanted() {
+    async function renderWanted() {
+        wantedList = await loadWanted();
         let filtered = wantedList.filter(w => {
-            if (wantedSearch && !w.title.includes(wantedSearch) && !(w.desc && w.desc.includes(wantedSearch))) return false;
+            if (wantedSearch && !w.title.includes(wantedSearch) && !(w.description && w.description.includes(wantedSearch))) return false;
             if (wantedSameLocation && w.location !== currentUser.location) return false;
             return true;
         });
         const container = document.getElementById("wantedList");
-        if (filtered.length === 0) { container.innerHTML = '<div class="empty-state">📢 暂无求购，去发布一条吧</div>'; return; }
+        if (filtered.length === 0) { container.innerHTML = '<div class="empty-state">📢 暂无求购</div>'; return; }
         let html = "";
         filtered.forEach(w => {
-            html += `<div class="wanted-card">
+            html += `<div class="wanted-card" onclick="showWantedDetail('${w.id}')">
                         <div class="item-img">📢</div>
                         <div class="item-info">
                             <div class="item-title">${escapeHtml(w.title)}</div>
-                            <div class="item-desc">
-                                <span class="item-tag">${w.cat}</span>
-                                ${w.desc ? `<span class="item-tag">${escapeHtml(w.desc)}</span>` : ''}
-                            </div>
-                            <div class="item-contact">📍 ${w.location} | ✉️ 私信联系</div>
+                            <div class="item-desc"><span class="item-tag">${w.cat}</span>${w.description ? `<span class="item-tag">${escapeHtml(w.description)}</span>` : ''}</div>
+                            <div class="item-contact">📍 ${w.location} | 👤 ${w.owner_name}</div>
                         </div>
                     </div>`;
         });
         container.innerHTML = html;
     }
-
-    // 我的页面
-    function renderProfile() {
-        const myItems = items.filter(i => i.ownerId === currentUser.id);
-        const myWanted = wantedList.filter(w => w.ownerId === currentUser.id);
+    
+    window.showWantedDetail = async function(id) {
+        const wanted = wantedList.find(w => w.id === id);
+        if (!wanted) return;
+        let contactHtml = wanted.contact && wanted.contact !== '未填' ? `<span class="copy-contact" onclick="copyContact('${escapeHtml(wanted.contact)}')">📋 复制联系方式</span>` : '<span style="color:gray;">未留联系方式</span>';
+        let detailHtml = `
+            <div class="detail-container">
+                <div class="detail-info">
+                    <p><strong>${escapeHtml(wanted.title)}</strong></p>
+                    <p>分类：${wanted.cat}</p>
+                    <p>期望地点：${wanted.location}</p>
+                    <p>描述：${escapeHtml(wanted.description) || '无'}</p>
+                    <p>发布者：${wanted.owner_name}</p>
+                    <p>联系方式：${contactHtml}</p>
+                    <button class="btn" onclick="switchPage('wanted')">返回</button>
+                </div>
+            </div>
+        `;
+        document.getElementById("detailPage").innerHTML = detailHtml;
+        switchPage("detail");
+    };
+    
+    document.getElementById("publishForm").addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const name = document.getElementById("itemName").value.trim();
+        if (!name) return alert("请输入物品名称");
+        const files = document.getElementById("itemImages").files;
+        let images = [];
+        for (let i = 0; i < Math.min(files.length, 3); i++) {
+            images.push(await compressImage(files[i], 200));
+        }
+        await supabase.from('items').insert([{
+            id: crypto.randomUUID(),
+            name: name,
+            cat: document.getElementById("itemCat").value,
+            condition: document.getElementById("itemCondition").value,
+            description: document.getElementById("itemDesc").value,
+            location: document.getElementById("campusLocation").value,
+            contact: document.getElementById("contact").value.trim() || "未填",
+            owner_id: currentUser.id,
+            owner_name: currentUser.name,
+            images: images
+        }]);
+        alert("发布成功！所有人可见");
+        document.getElementById("publishForm").reset();
+        document.getElementById("imagePreview").innerHTML = "";
+        await renderHome();
+        switchPage("home");
+    });
+    
+    document.getElementById("itemImages").addEventListener("change", function() {
+        const preview = document.getElementById("imagePreview");
+        preview.innerHTML = "";
+        Array.from(this.files).slice(0, 3).forEach(file => {
+            const reader = new FileReader();
+            reader.onload = e => { const img = document.createElement("img"); img.src = e.target.result; preview.appendChild(img); };
+            reader.readAsDataURL(file);
+        });
+    });
+    
+    document.getElementById("publishWantedForm").addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const title = document.getElementById("wantedTitle").value.trim();
+        if (!title) return alert("请输入标题");
+        await supabase.from('wanted').insert([{
+            id: crypto.randomUUID(),
+            title: title,
+            cat: document.getElementById("wantedCat").value,
+            description: document.getElementById("wantedDesc").value,
+            location: document.getElementById("wantedLocation").value,
+            contact: document.getElementById("wantedContact").value.trim() || "未填",
+            owner_id: currentUser.id,
+            owner_name: currentUser.name
+        }]);
+        alert("求购发布成功！");
+        document.getElementById("publishWantedForm").reset();
+        await renderWanted();
+        switchPage("wanted");
+    });
+    
+    async function renderProfile() {
+        const myItems = items.filter(i => i.owner_id === currentUser.id);
+        const myWanted = wantedList.filter(w => w.owner_id === currentUser.id);
         let itemsHtml = myItems.length ? "" : '<div class="empty-state">暂无闲置</div>';
         myItems.forEach(i => {
-            itemsHtml += `<div class="item-card">
-                            <div class="item-img">${i.images && i.images[0] ? `<img src="${i.images[0]}" />` : '📦'}</div>
-                            <div class="item-info">
-                                <div class="item-title">${escapeHtml(i.name)}</div>
-                                <div class="item-desc">${i.location} | ${i.condition}</div>
-                                <div class="item-contact">📍 ${i.location} | 📞 ${i.contact || "未填"}</div>
-                                <div><span class="delete-btn" data-id="${i.id}" data-type="item">删除</span></div>
-                            </div>
-                          </div>`;
+            itemsHtml += `<div class="item-card"><div class="item-img">${i.images && i.images[0] ? `<img src="${i.images[0]}" />` : '📦'}</div><div class="item-info"><div class="item-title">${escapeHtml(i.name)}</div><div class="item-desc">${i.location} | ${i.condition}</div><div class="item-contact"><span class="delete-btn" onclick="deleteMyItem('${i.id}', 'item')">删除</span></div></div></div>`;
         });
         let wantedHtml = myWanted.length ? "" : '<div class="empty-state">暂无求购</div>';
         myWanted.forEach(w => {
-            wantedHtml += `<div class="wanted-card">
-                            <div class="item-info">
-                                <div class="item-title">${escapeHtml(w.title)}</div>
-                                <div class="item-desc">${w.location}</div>
-                                <div class="item-contact">📍 ${w.location} | 📞 ${w.contact || "未填"}</div>
-                                <div><span class="delete-btn" data-id="${w.id}" data-type="wanted">删除</span></div>
-                            </div>
-                          </div>`;
+            wantedHtml += `<div class="wanted-card"><div class="item-info"><div class="item-title">${escapeHtml(w.title)}</div><div class="item-desc">${w.location}</div><div class="item-contact"><span class="delete-btn" onclick="deleteMyItem('${w.id}', 'wanted')">删除</span></div></div></div>`;
         });
         document.getElementById("myItemsList").innerHTML = itemsHtml;
         document.getElementById("myWantedList").innerHTML = wantedHtml;
-        document.querySelectorAll('.delete-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                const id = parseInt(btn.getAttribute('data-id'));
-                const type = btn.getAttribute('data-type');
-                if (type === 'item') {
-                    items = items.filter(i => i.id !== id);
-                    saveItems();
-                } else if (type === 'wanted') {
-                    wantedList = wantedList.filter(w => w.id !== id);
-                    saveWanted();
-                }
-                renderProfile();
-                renderHome();
-                renderWanted();
-            });
-        });
     }
-
-    function escapeHtml(str) { if (!str) return ""; return str.replace(/[&<>]/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[m])); }
-
-    // 页面切换
+    
+    window.deleteMyItem = async (id, type) => {
+        if (confirm("确定删除？")) {
+            if (type === 'item') await supabase.from('items').delete().eq('id', id);
+            else await supabase.from('wanted').delete().eq('id', id);
+            await renderHome();
+            await renderWanted();
+            await renderProfile();
+        }
+    };
+    
+    document.getElementById("myLocationSelect").addEventListener("change", async (e) => {
+        currentUser.location = e.target.value;
+        await supabase.from('users').update({ location: currentUser.location }).eq('id', currentUser.id);
+        if (sameLocationOnly) renderHome();
+        if (wantedSameLocation) renderWanted();
+        alert("当前位置已更新");
+    });
+    
     function switchPage(pageId) {
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
         document.getElementById(pageId + "Page").classList.add('active');
@@ -1039,8 +404,7 @@ window.importData = function() {
         if (pageId === "wanted") renderWanted();
         if (pageId === "profile") renderProfile();
     }
-
-    // 绑定筛选事件
+    
     function bindFilters() {
         document.querySelectorAll('.filter-chip').forEach(chip => {
             chip.addEventListener('click', () => {
@@ -1055,28 +419,17 @@ window.importData = function() {
         document.getElementById("wantedSearchInput").addEventListener("input", e => { wantedSearch = e.target.value; renderWanted(); });
         document.getElementById("wantedSameLocationOnly").addEventListener("change", e => { wantedSameLocation = e.target.checked; renderWanted(); });
     }
-
-    // 初始化
-    function init() {
-        loadData();
+    
+    function escapeHtml(str) { if (!str) return ""; return str.replace(/[&<>]/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[m])); }
+    
+    async function init() {
+        await initUser();
+        await renderHome();
+        await renderWanted();
+        await renderProfile();
         bindFilters();
-        renderHome();
-        renderWanted();
-        renderProfile();
+        document.querySelectorAll('.nav-item').forEach(nav => nav.addEventListener('click', () => switchPage(nav.getAttribute('data-page'))));
         document.querySelector('.filter-chip[data-cat="all"]').classList.add('active');
-        document.querySelectorAll('.nav-item').forEach(nav => {
-            nav.addEventListener('click', () => switchPage(nav.getAttribute('data-page')));
-        });
-        const locationSelect = document.getElementById("myLocationSelect");
-        if (locationSelect) {
-            locationSelect.addEventListener("change", (e) => {
-                currentUser.location = e.target.value;
-                saveUserLocation();
-                if (sameLocationOnly) renderHome();
-                if (wantedSameLocation) renderWanted();
-                alert("当前位置已更新为：" + currentUser.location);
-            });
-        }
     }
     init();
 </script>
